@@ -4,23 +4,24 @@ import Search from './components/Search.jsx';
 import Movie from './components/Movie.jsx';
 import MovieList from './components/MovieList.jsx';
 import AddMovie from './components/AddMovie.jsx';
-var movies = [
-  {title: 'Mean Girls'},
-  {title: 'Hackers'},
-  {title: 'The Grey'},
-  {title: 'Sunshine'},
-  {title: 'Ex Machina'},
-];
+import $ from 'jquery';
+// var movies = [
+//   {title: 'Mean Girls'},
+//   {title: 'Hackers'},
+//   {title: 'The Grey'},
+//   {title: 'Sunshine'},
+//   {title: 'Ex Machina'},
+// ];
 
 class App extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      movies: movies,
+      movies: [],
       addMovieField: '',
       searchField:'',
-      filteredMovies: movies
+      filteredMovies: []
 
     };
     this.onAddMovieEnter = this.onAddMovieEnter.bind(this);
@@ -29,10 +30,42 @@ class App extends React.Component {
 
   }
 
+  componentDidMount() {
+  	this.requestMovies();
+  }
+
+  requestMovies() {
+
+    $.ajax({
+      url: 'http://127.0.0.1:3000/movies',
+      type: 'GET',
+      contentType: 'application/json',
+      success: (data) => {
+        this.setState({
+          movies: data
+        })
+      },
+      error: function(error) {
+        console.error('failed to receive movies', error);
+      }
+    });
+
+  }
+
   search() {
-  	this.setState({
-  	  movies: movies.filter(movie => movie.title.toLowerCase().indexOf(this.state.searchField.toLowerCase()) > -1)
-  	});
+    $.ajax({
+      url: 'http://127.0.0.1:3000/movies',
+      type: 'GET',
+      contentType: 'application/json',
+      success: (data) => {
+        this.setState({
+          movies: data.filter(movie => movie.title.toLowerCase().indexOf(this.state.searchField.toLowerCase()) > -1)
+        })
+      },
+      error: function(error) {
+        console.error('failed to receive movies', error);
+      }
+    });  	
   		
   }
 
@@ -51,16 +84,28 @@ class App extends React.Component {
 
   }
   addMovie() {
-  	movies.push({title: this.state.addMovieField});
+	$.ajax({
+      url: 'http://127.0.0.1:3000/movies',
+      type: 'POST',      
+      data: {title: this.state.addMovieField},
+      success: (data) => {
+        this.setState({
+          movies: data
+        })
+      },
+      error: function (error) {
+        console.error('failed to add movie', error);
+      }
+    });
   } 
 
   onAddMovieEnter(e) {
     if (e.key === 'Enter') {
       this.addMovie();
     }
-    this.setState({
-    	movies:movies
-    })
+    // this.setState({
+    // 	movies:movies
+    // })
   }
 
 
