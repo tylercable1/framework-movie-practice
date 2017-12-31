@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM  from 'react-dom';
 
-var Search = () => (
+var Search = (props) => (
 <div>
   <input
     type="text"	
+    onChange={props.onChangeSearch}
   />
   <button 
     type="button">

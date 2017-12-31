@@ -17,9 +17,52 @@ class App extends React.Component {
     super();
 
     this.state = {
+      movies: movies,
+      addMovieField: '',
+      searchField:'',
+      filteredMovies: movies
 
     };
+    this.onAddMovieEnter = this.onAddMovieEnter.bind(this);
+    this.onChangeMovieField = this.onChangeMovieField.bind(this);
+    this.onChangeSearch = this.onChangeSearch.bind(this);
+
   }
+
+  search() {
+  	this.setState({
+  	  movies: movies.filter(movie => movie.title.toLowerCase().indexOf(this.state.searchField.toLowerCase()) > -1)
+  	});
+  		
+  }
+
+  onChangeSearch(e) {
+  	this.setState({
+  	  searchField: e.target.value
+  	}, () => {
+  	  this.search();	
+  	});
+  }
+
+  onChangeMovieField(e) {
+  	this.setState({
+  	  addMovieField: e.target.value
+  	});
+
+  }
+  addMovie() {
+  	movies.push({title: this.state.addMovieField});
+  } 
+
+  onAddMovieEnter(e) {
+    if (e.key === 'Enter') {
+      this.addMovie();
+    }
+    this.setState({
+    	movies:movies
+    })
+  }
+
 
   render() {
     return (
@@ -27,14 +70,15 @@ class App extends React.Component {
       	
       	<div className="search">
       	  <Search
-
+            onChangeSearch={this.onChangeSearch}
       	  />
       	  <AddMovie
-
+			onAddMovieEnter={this.onAddMovieEnter}
+			onChangeMovieField={this.onChangeMovieField}
       	  />
       	</div>
       	<MovieList
-      	  movies={movies}
+      	  movies={this.state.movies}
       	/>  
      
 

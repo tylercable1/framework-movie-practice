@@ -2,12 +2,23 @@ import React from 'react';
 import ReactDOM  from 'react-dom';
 import Movie from './Movie.jsx';
 
-var MovieList = (props) => (
- <ul className="movie-list">
-    {props.movies.map((movie) =>
-      <Movie key={movie.title} movie={movie} />
-    )}
-  </ul>
-);
+class MovieList extends React.Component {
+  constructor(props) {
+    super();
+    this.state = {
+
+    };
+  }
+
+  render() {
+    return (
+       <div className="movie-list">
+          {this.props.movies.map((movie) =>
+            <Movie key={movie.title} movie={movie} />
+          )}
+        </div>
+    )
+  }
+}
 
 export default MovieList;
