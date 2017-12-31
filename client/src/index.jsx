@@ -87,7 +87,8 @@ class App extends React.Component {
 	$.ajax({
       url: 'http://127.0.0.1:3000/movies',
       type: 'POST',      
-      data: {title: this.state.addMovieField},
+      contentType: 'application/json',
+      data: JSON.stringify({title: this.state.addMovieField}),
       success: (data) => {
         this.setState({
           movies: data
