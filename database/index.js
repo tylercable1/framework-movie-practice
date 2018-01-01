@@ -27,9 +27,8 @@ module.exports = {
   },
 
   postNewMovies: (params, callback) => {
-    var queryStr = 'insert into movies (title) values (?)';
+    var queryStr = 'insert ignore movies (title) values (?)';
     connection.query(queryStr, params, (err, results) => {
-  	  console.log(results);
   	  callback(err, results);
     }) 
   }

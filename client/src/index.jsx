@@ -31,10 +31,26 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-  	this.requestMovies();
+  	this.checkApiDatabase();
+  	this.checkMysqlDatabase();
   }
 
-  requestMovies() {
+  checkApiDatabase() {
+
+    $.ajax({
+      url: 'http://127.0.0.1:3000/load',
+      type: 'GET',
+      contentType: 'application/json',
+      success: () => {
+        this.checkMysqlDatabase()
+      },
+      error: function(error) {
+        console.error('failed to receive movies', error);
+      }
+    });
+  }  
+
+  checkMysqlDatabase() {
 
     $.ajax({
       url: 'http://127.0.0.1:3000/movies',
@@ -89,10 +105,8 @@ class App extends React.Component {
       type: 'POST',      
       contentType: 'application/json',
       data: JSON.stringify({title: this.state.addMovieField}),
-      success: (data) => {
-        this.setState({
-          movies: data
-        })
+      success: () => {
+        this.search();
       },
       error: function (error) {
         console.error('failed to add movie', error);
